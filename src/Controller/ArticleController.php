@@ -3,16 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\View;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-class ArticleController extends FOSRestController
+use FOS\RestBundle\Request\ParamFetcherInterface;
+class ArticleController extends AbstractFOSRestController
 {
     /**
      * @Get(
@@ -50,4 +52,43 @@ class ArticleController extends FOSRestController
          ]);
      }
 
+
+  /**
+     * @Rest\Get("/articles", name="app_article_list")
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     requirements="[a-zA-Z0-9]",
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="15",
+     *     description="Max number of movies per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="offset",
+     *     requirements="\d+",
+     *     default="0",
+     *     description="The pagination offset"
+     * )
+     * @Rest\View()
+     */
+     public function list(ArticleRepository $articleRepository, ParamFetcherInterface $paramFetcher)
+     {
+
+      return $articleRepository->search(
+        $paramFetcher->get('keyword'),
+        $paramFetcher->get('order'),
+        $paramFetcher->get('limit'),
+        $paramFetcher->get('offset')
+      );
+     }
 }

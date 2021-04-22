@@ -47,4 +47,20 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function search($term, $order= 'asc', $limit = 20 , $offset = 0)
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->select('a')
+            ->orderBy('a.title', $order);
+
+        if($term) {
+            $qb->where('a.title LIKe ?1')
+                ->setParameter(1, '%'.$term .'%');
+        }
+
+        $query = $qb->getQuery();
+
+        return $this->paginate($query, $limit, $offset);
+    }
 }
