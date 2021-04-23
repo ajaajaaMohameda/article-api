@@ -38,6 +38,10 @@ class ExceptionListener implements EventSubscriberInterface
                 'message' => $exception->getMessage() 
             ]; 
         }
+
+        $body = $this->serializer->serialize($result['body'], 'json');
+
+        $event->setResponse(new Response($body, $result['code']));
     }
 
     public function addNormalizer(NormalizerInterface $normalizer) {
