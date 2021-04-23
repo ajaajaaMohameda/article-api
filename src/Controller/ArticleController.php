@@ -14,6 +14,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\RestBundle\Request\ParamFetcherInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 class ArticleController extends AbstractFOSRestController
 {
     /**
@@ -37,11 +40,21 @@ class ArticleController extends AbstractFOSRestController
      * 
      * @Rest\View(StatusCode=201)
      * 
-     * @ParamConverter("article", converter="fos_rest.request_body")
+     * @ParamConverter("article", 
+     * 
+     * converter="fos_rest.request_body")
+     * 
+     * options= {
+     *  "validator" = { "groups" = "Create" }
+     * }
      */
 
-     public function create(Article $article)
+     public function create(Article $article, ValidatorInterface $validator, ConstraintViolationList $violations)
      {
+         if(count($violations)) {
+             $this->view($validator, Response::HTTP_BAD_REQUEST);
+         }
+
          $em =$this->getDoctrine()->getManager();
          $em->persist($article);
          $em->flush();
