@@ -20,6 +20,7 @@ class Article
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank(groups={"Create"})
+     * 
      */
     private $title;
 

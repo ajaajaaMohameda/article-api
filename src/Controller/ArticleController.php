@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Exception\ResourceValidationException;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -45,28 +46,37 @@ class ArticleController extends AbstractFOSRestController
      * converter="fos_rest.request_body")
      * 
      * options= {
-     *  "validator" = { "groups" = "Create" }
+     *  "validator" = { "groups"="Create" }
      * }
      */
 
-     public function create(Article $article, ValidatorInterface $validator, ConstraintViolationList $violations)
-     {
-         if(count($violations)) {
-             $this->view($validator, Response::HTTP_BAD_REQUEST);
-         }
+    public function create(Article $article, ConstraintViolationList $violations)
+    {
+        if (count($violations)) {
+            $message = 'the JSON sent contains invalid data. Here are the errors you need to correct: ';
 
-         $em =$this->getDoctrine()->getManager();
-         $em->persist($article);
-         $em->flush();
+            foreach ($violations as $violation) {
+                $message .= sprintf("Field %s: %s", $violation->getPropertyPath(), $violation->getMessage());
+            }
 
-         return $this->view($article, Response::HTTP_CREATED, [
-             'location' => $this->generateUrl('app_article_show', ['id' => $article->getId()],
-             UrlGeneratorInterface::ABSOLUTE_URL)
-         ]);
-     }
+            throw new ResourceValidationException($message);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($article);
+        $em->flush();
+
+        return $this->view($article, Response::HTTP_CREATED, [
+            'location' => $this->generateUrl(
+                'app_article_show',
+                ['id' => $article->getId()],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            )
+        ]);
+    }
 
 
-  /**
+    /**
      * @Rest\Get("/articles", name="app_article_list")
      * @Rest\QueryParam(
      *     name="keyword",
@@ -94,14 +104,14 @@ class ArticleController extends AbstractFOSRestController
      * )
      * @Rest\View()
      */
-     public function list(ArticleRepository $articleRepository, ParamFetcherInterface $paramFetcher)
-     {
+    public function list(ArticleRepository $articleRepository, ParamFetcherInterface $paramFetcher)
+    {
 
-      return $articleRepository->search(
-        $paramFetcher->get('keyword'),
-        $paramFetcher->get('order'),
-        $paramFetcher->get('limit'),
-        $paramFetcher->get('offset')
-      );
-     }
+        return $articleRepository->search(
+            $paramFetcher->get('keyword'),
+            $paramFetcher->get('order'),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('offset')
+        );
+    }
 }
