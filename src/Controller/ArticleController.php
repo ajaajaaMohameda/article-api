@@ -39,7 +39,7 @@ class ArticleController extends AbstractFOSRestController
     /**
      * @Put(
      *  path="/articles/{id}",
-     *  name="app_articles_update",
+     *  name="app_article_update",
      *  requirements= {"id"="\d+"}
      * )
      * @paramConverter("data", converter="fos_rest.request_body")
@@ -71,7 +71,7 @@ class ArticleController extends AbstractFOSRestController
     /**
      * @Delete(
      *  path="/articles/{id}",
-     *  name="app_articles_delete",
+     *  name="app_article_delete",
      *  requirements= {"id"="\d+"}
      * )
      * @Rest\View(StatusCode = 204)

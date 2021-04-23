@@ -5,7 +5,37 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation as Serializer;
 /**
+ * @Hateoas\Relation(
+ *  "self",
+ *      href= @Hateoas\Route(
+ *      "app_article_show",
+ *      parameters={"id" = "expr(object.getId())"},
+ *      absolute= true
+ * )
+ * )
+ * 
+ * @Hateoas\Relation(
+ *  "modify",
+ *  href= @Hateoas\Route(
+ *      "app_article_update",
+ *      parameters= {"id" = "expr(object.getId())"}
+ *  )
+ * )
+ * @Hateoas\Relation(
+ *  "delete",
+ *  href= @Hateoas\Route(
+ *      "app_article_delete",
+ *      parameters= {"id" = "expr(object.getId())"}
+ *  )
+ * )
+ * 
+ * @Hateoas\Relation(
+ *  "author",
+ *  embedded = @Hateoas\Embedded("expr(object.getAuthor())")
+ * )
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
  */
 class Article
@@ -20,15 +50,22 @@ class Article
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank(groups={"Create"})
-     * 
+     * @Serializer\Since("1.0")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Serializer\Since("1.0")
      * @Assert\NotBlank(groups={"Create"})
      */
     private $content;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Serializer\since("2.0")
+     */
+    private $shortDescription;
 
     /**
      * @ORM\ManyToOne(targetEntity=Author::class, inversedBy="articles")

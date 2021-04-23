@@ -1,5 +1,11 @@
 # Read the documentation: https://symfony.com/doc/master/bundles/FOSRestBundle/index.html
 fos_rest: 
+    versioning:
+        enabled: true
+        resolvers:
+            media_type: # Accept header
+                enabled: true
+                regex: '/(v|version)=(?P<version>[0-9\.]+)/'
     exception:
         enabled: true
         codes:
@@ -10,6 +16,8 @@ fos_rest:
         validate: true
         validation_errors_argument: violations
     view:
+        mime_types:
+            json: ['application/json', 'application/json;version=1.0', 'application/json;version=2.0']
         formats: {json: true, xml: false, rss: false}
         view_response_listener: true
     serializer: 
