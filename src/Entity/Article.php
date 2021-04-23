@@ -36,6 +36,11 @@ use JMS\Serializer\Annotation as Serializer;
  *  "author",
  *  embedded = @Hateoas\Embedded("expr(object.getAuthor())")
  * )
+ * 
+ * @Hateoas\Relation(
+ *  "weather",
+ *  embedded = @Hateoas\Embedded("expr(service('App\\Weather\\Weather').getCurrent())")
+ * )
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
  */
 class Article
