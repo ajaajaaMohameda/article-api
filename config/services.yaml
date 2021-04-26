@@ -47,3 +47,10 @@ services:
             - '@csa_guzzle.client.weather'
             - '@jms_serializer'
             - '%weather_api_key%'
+    github_authenticator:
+        class: App\Security\GithubAuthenticator
+    github_user_provider:
+        class: App\Security\GithubUserProvider
+        arguments:
+            - '@csa_guzzle.client.github_api'
+            - '@jms_serializer'

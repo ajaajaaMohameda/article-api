@@ -162,6 +162,19 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.2.0"
     },
+    "nelmio/api-doc-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "c8e0c38e1a280ab9e37587a8fa32b251d5bc1c94"
+        },
+        "files": [
+            "config/packages/nelmio_api_doc.yaml",
+            "config/routes/nelmio_api_doc.yaml"
+        ]
+    },
     "nikic/php-parser": {
         "version": "v4.10.4"
     },
@@ -170,6 +183,15 @@
     },
     "php": {
         "version": "7.4"
+    },
+    "phpdocumentor/reflection-common": {
+        "version": "2.2.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "5.2.2"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.4.0"
     },
     "phpstan/phpdoc-parser": {
         "version": "0.4.14"
@@ -340,6 +362,9 @@
     "symfony/property-access": {
         "version": "v4.4.20"
     },
+    "symfony/property-info": {
+        "version": "v4.4.20"
+    },
     "symfony/proxy-manager-bridge": {
         "version": "v4.4.20"
     },
@@ -357,7 +382,28 @@
             "config/routes.yaml"
         ]
     },
+    "symfony/security-bundle": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.4",
+            "ref": "7b4408dc203049666fe23fabed23cbadc6d8440f"
+        },
+        "files": [
+            "config/packages/security.yaml"
+        ]
+    },
     "symfony/security-core": {
+        "version": "v4.4.21"
+    },
+    "symfony/security-csrf": {
+        "version": "v4.4.20"
+    },
+    "symfony/security-guard": {
+        "version": "v4.4.20"
+    },
+    "symfony/security-http": {
         "version": "v4.4.21"
     },
     "symfony/service-contracts": {
@@ -424,6 +470,9 @@
     "twig/twig": {
         "version": "v3.3.0"
     },
+    "webmozart/assert": {
+        "version": "1.10.0"
+    },
     "white-october/pagerfanta-bundle": {
         "version": "v1.3.2"
     },
@@ -447,5 +496,8 @@
     },
     "willdurand/negotiation": {
         "version": "3.0.0"
+    },
+    "zircote/swagger-php": {
+        "version": "3.1.0"
     }
 }
